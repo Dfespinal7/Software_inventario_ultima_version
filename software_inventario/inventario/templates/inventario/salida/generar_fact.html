@@ -1,0 +1,78 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block titul %}Facturas{% endblock %}
+{% block container %}
+<style>
+    .body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .invoice-number {
+        border: 1px solid #000;
+        padding: 5px;
+        text-align: center;
+        width: 100px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .total {
+        text-align: right;
+        margin-top: 20px;
+    }
+</style>
+{% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+<div class="bg-white p-4 m-4 border rounded">
+    <h1 class="text-center">Generar factura</h1>
+    <div class="container">
+        <form action="{% url 'lista_factura' %}" method="post" class="row">
+            {% csrf_token %}
+            <div class="col-md-4">
+                <label for="" class="form-label">Seleccione fecha de la salida</label>
+                <input type="date" class="form-control" name="fecha" required>
+            </div>
+            <div class="col-md-4">
+                <label for="" class="form-label">Seleccione Cliente</label>
+                <select name="cliente" id="" class="form-control" required>
+                    <option value="">Seleccionar</option>
+                    {% for i in data %}
+                        <option value="{{i.idCliente}}">{{i.nombre}}</option>
+                    {% endfor %}
+                </select> 
+            </div>
+            <div class="col-md-4">
+                <label for="" class="form-label">Seleccione Formato</label>
+                <select name="formato" id="" class="form-control" required>
+                    <option value="">Seleccionar</option>
+                    <option value="factura">Factura</option>
+                    <option value="remision">Remision</option>
+                </select> 
+            </div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success">Buscar</button>
+            </div>
+            
+        </form>
+    </div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+    
+{% endblock %}

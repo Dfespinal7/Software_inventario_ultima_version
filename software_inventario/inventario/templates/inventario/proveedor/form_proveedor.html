@@ -1,0 +1,32 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Formulario Proveedores{% endblock %}
+{% block container %}
+{% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+<div class="bg-white p-4 m-4 border rounded">
+    <h1 class="text-center">Formulario Proveedor</h1>
+    <div class="d-flex justify-content-center">
+        <div class="border p-4 rounded shadow-sm bg-light w-75">
+            <form action="{% url 'guardar_proveedor' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="" name="idProveedor" class="form-control" value="{{idProveedor}}" >
+                <div class="mb-3">
+                    <label for="" class="form-label">Nombre del Proveedor</label>
+                    <input type="" id="" name="nombreProveedor" class="form-control" placeholder="Ingrese Nombre del Proveedor" value="{{data.nombre}}"  required>
+                </div>
+                <div class="mb-3">
+                    <label for="" class="form-label">Documento/NIT</label>
+                    <input type="" id="" name="documento" class="form-control" placeholder="Ingrese Documento o NIT del Proveedor" value="{{data.documento}}"  required>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}

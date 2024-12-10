@@ -1,0 +1,54 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Clientes{% endblock %}
+{% block container %}
+{% if request.session.logueo %}
+<div class="bg-white p-4 m-4 border rounded">
+    <img src="{% static 'inventario/img/Base de cliente.png' %}" alt="" style="width: 150px; height: auto; float: right; margin-left: 10px;">
+    <h1 class="text-center">Clientes</h1>
+    <form class="d-flex mb-2" role="search" method="post" action="{% url 'buscar_cliente' %}">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Ingrese nombre del Cliente" aria-label="Search" name="cliente">
+        <button class="btn btn-outline-success" type="submit">Buscar</button>
+      </form>
+    {% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+    <a href="{% url 'form_clientes' %}" class="btn btn-success mb-2">Añadir Cliente</a>
+    {% endif %}
+    <table class="table table-bordered">
+        <thead class="bg-light">
+            <tr>
+                <th>idCliente</th>
+                <th>Nombre</th>
+                <th>Documento</th>
+                {% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+                <th>Acción</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+                <tr>
+                <td>{{i.idCliente}}</td>
+                <td>{{i.nombre}}</td>
+                <td>{{i.documento}}</td>
+                {% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+                <td>
+                    <a class="btn btn-warning" href="{% url 'editar_cliente' i.idCliente %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                      </svg></a>
+                    <a class="btn btn-danger" href="{% url 'eliminar_cliente' i.idCliente %}" onclick="return confirm('¿Estás seguro de eliminar el cliente?,si eliminar el cliente se eliminran todas las salidas relacionadas a este')"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                      </svg></i></a>
+                </td>
+                {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,100 @@
+{% load static %}
+{% load custom_filters %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .invoice-number {
+        border: 1px solid #000;
+        padding: 5px;
+        text-align: center;
+        width: 100px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .total {
+        text-align: right;
+        margin-top: 20px;
+    }
+</style>
+<div class="container mt-4 container">
+    
+    <h1 class="text-center">Factura</h1>
+    {% if datos %}
+    <div class="header">
+        <div>
+            <h2>INVEMPRESAS SA</h2>
+            <strong><p>NIT: 123456789</p></strong>
+        </div>
+        <div>
+            <strong> <p class="invoice-number">Factura # {% for i in datos %}{{i.idSalida}}-{% endfor %} </p></strong>
+        </div>
+    </div>
+    
+    <p>Fecha: {{fecha}}</p>
+    
+    <table>
+        <tr>
+            <th>Nombre del Cliente</th>
+            <th>Documento/NIT</th>
+        </tr>
+        <tr>
+            <td>{{nombre}}</td>
+            <td>{{doc}}</td>
+        </tr>
+    </table>
+    
+    <table>
+        <tr>
+            <th>Código</th>
+            <th>Producto</th>
+            <th>Unidad</th>
+            <th>Observacion</th>
+            <th>Cantidad</th>
+            <th>Valor Unidad</th>
+            
+        </tr>
+        {%for i in datos%}
+        <tr>
+            <td>{{i.idProducto.idProducto}}</td>
+            <td>{{i.idProducto.nombreProducto}}</td>
+            <td>{{i.idProducto.unidadMedida}}</td>
+            <td>{{i.observacion}}</td>
+            <td>{{i.cantidadSalida}}</td>
+            <td>${{i.valorUnidad|format_currency}}</td>
+            
+        </tr>
+        {% endfor %}
+    </table>
+    
+    
+    <div class="total">
+        <p>Subtotal: ${{subtotal|format_currency}}</p>
+        <p>IVA 19%: ${{iva|format_currency}}</p>
+        <p><strong>Total: ${{total|format_currency}}</strong>
+    {% else %}
+    <h1>No se encontraron resultados</h1>
+    {% endif %}
+            
+</div>
+
+
+</div> 

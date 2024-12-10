@@ -1,0 +1,54 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block titul %}Indicadores ABC{% endblock %}
+{% block container %}
+{% if request.session.logueo %}
+<div class="bg-white p-4 border rounded custom-padding m-4 rounded-lg">
+    
+    <div class="text-center">
+        <img src="{% static 'inventario/img/MetodoInventarioABC.png' %}" alt="" style="width: 100px; height: auto; float: right; margin-left: 10px;">
+        <h1>Indicadores ABC</h1>
+        <table class="table table-bordered">
+            
+            <thead class="bg-light">
+                <th>Codigo</th>
+                <th>Nombre Producto</th>
+                <th>Unidades entrada</th>
+                <th>Costo/unitario</th>
+                <th>inversión/consumo anual</th>
+                <th>%Participación total anual</th>
+                <th>% participación total Acomulado</th>
+                <th>Clasificación por categoria</th>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                    <tr>
+                        <td>{{i.idProducto.idProducto}}</td>
+                        <td>{{i.idProducto}}</td>
+                        <td>{{i.totalEntrada}}</td>
+                        <td>{{i.valorUnidad|format_currency}}</td>
+                        <td>{{i.totalvalorE|format_currency}}</td>
+                        <td>{{i.sumat|format_currency}}</td>
+                        <td>{{i.porcent|floatformat:2}}%</td>
+                        <td>
+                            {% if i.porcent < 80 %}
+                            <strong class="text-danger">A</strong>
+                            {% elif i.porcent >= 80 and i.porcent < 95 %}
+                            <strong class="text-warning">B</strong>
+                            {% else %}
+                            <strong class="text-success">C</strong>
+                            {% endif %}
+                        </td>
+                        
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+  </div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}

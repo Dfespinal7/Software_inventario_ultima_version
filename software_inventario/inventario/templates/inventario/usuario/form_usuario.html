@@ -1,0 +1,44 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Formulario de Usuario{% endblock %}
+{% block container %}
+{% if request.session.logueo.rol == 3 %}
+<div class="bg-white p-4 m-4 border rounded">
+        <div class="container mt-2">
+            <h1 class="text-center">Formulario de Usuario</h1>
+            <div class="d-flex justify-content-center">
+                <div class="border p-4 rounded shadow-sm bg-light w-75">
+                <form action="{% url 'guardar_usuario' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{idUsuario}}" name="idUsuario">
+                    <label for="" class="form-label">Ingrese su Nombre</label>
+                    <input type="text" class="form-control" placeholder="Ingrese nombre completo" name="nombre" value="{{data.nombre}}" required>
+                    <label for="" class="form-label">Ingrese su Email</label>
+                    <input type="email" class="form-control" placeholder="Ingrese Email" name="email" value="{{data.email}}" required>
+                    <label for="" class="form-label">Ingrese Contraseña</label>
+                    <input type="text" class="form-control" placeholder="Ingrese Contraseña" name="contra" value="{{data.password}}" required>
+                    <label for="" class="form-label">Seleccione Rol</label>
+                    <select name="rol"  class="form-control" required>
+                        <option value="">Seleccione Opción</option>
+                        <option value="3" {% if data.rol == 3 %}selected{% endif %}>SuperAdministrador</option>
+                        <option value="1" {% if data.rol == 1 %}selected{% endif %}>Administrador</option>
+                        <option value="2" {% if data.rol == 2 %}selected{% endif %}>Empleado</option>
+                    </select>
+                    {% if idUsuario %}
+                    <div class="text-center mt-2">
+                        <button class="btn btn-success" type="submit">Editar</button>
+                    </div>
+                    {% else %}
+                    <div class="text-center mt-2">
+                        <button class="btn btn-success" type="submit">Añadir</button>
+                    </div>
+                    {% endif %}
+                </form>
+                </div>
+        </div>  
+    </div>
+</div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}

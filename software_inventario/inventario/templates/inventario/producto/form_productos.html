@@ -1,0 +1,155 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Formulario Productos{% endblock %}
+{% block container %}
+{% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+<div class="bg-white p-4 border rounded m-4">
+    <h1 class="text-center">Formulario</h1>
+
+    <div class="container mt-5">
+        <form id="mainForm" action="{% url 'guardar_datos' %}" method="post">
+            {% csrf_token %}
+            <div class="accordion" id="accordionExample">
+
+                <!-- Primer Formulario -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Producto
+                        </button>
+                    </h2>
+                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Fecha de cración</label>
+                                <input type="date" class="form-control" id="" name="fecha" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Codigo del Producto</label>
+                                <input type="text" class="form-control" id="input2" name="idProducto" placeholder="Ingresa codigo del Producto" value="{{idProducto}}" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="hidden" name="idStock" value="{{idStockInventadrio}}">
+                                <label for="input1" class="form-label">Categoria</label>
+                                <select name="idCategoria" id="" class="form-control" required>
+                                    <option value="">Seleccione Categoria</option>
+                                    {% for i in categorias %}
+                                    <option value="{{i.idCategoria}}">{{i.nombreCategoria}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Nombre del Producto</label>
+                                <input type="text" class="form-control" id="input2" name="nombreProducto" placeholder="Ingresa el Producto" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input2" class="form-label">Unidad de medida</label>
+                                <input type="text" class="form-control" id="input2" name="unidadMedida" placeholder="Ingresa Unidad de medida">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Segundo Formulario -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Entrada
+                        </button>
+                    </h2>
+                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                <input type="hidden" name="idEntrada" value="{{idEntrada}}">
+                                <label for="input3" class="form-label">Proveedores</label>
+                                <select name="idProveedor" id="2" class="form-control">
+                                    <option value="1">Selecciones Proveedor</option>
+                                    {% for i in proveedores %}
+                                    <option value="{{i.idProveedor}}">{{i.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input4" class="form-label">N° de Factura</label>
+                                <input type="text" class="form-control" id="input4" name="obsent" placeholder="Ingresa N° de Factura">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input4" class="form-label">Cantidad Entrada</label>
+                                <input type="text" class="form-control" id="ent" name="cantent" placeholder="Ingresa Cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input4" class="form-label">Valor de unidad</label>
+                                <input type="text" class="form-control" id="valoruni" name="valoruEntr" placeholder="Ingresa Valor">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tercer Formulario -->
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingThree">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Salida
+                        </button>
+                    </h2>
+                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="mb-3">
+                                <input type="hidden" name="idSalida" value="{{idSalida}}">
+                                <label for="input5" class="form-label">Cliente</label>
+                                <select name="idCliente" id="documento" onchange="actDocumento()" class="form-control">
+                                    <option value="1" >Seleccione Cliente</option>
+                                    {% for i in clientes %}
+                                    <option value="{{i.idCliente}}" data-documento="{{i.documento}}">{{i.nombre}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">Documento del Cliente</label>
+                                <input type="text" class="form-control" id="doc" name="documento" placeholder="Ingresa el Documento" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">observación</label>
+                                <input type="text" class="form-control" id="input6" name="obssal" placeholder="Ingresa el Obsevación">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">Cantidad de salida</label>
+                                <input type="text" class="form-control" id="sal" name="cantsal" placeholder="Ingresa Cantidad">
+                            </div>
+                            <div class="mb-3">
+                                <label for="input6" class="form-label">Valor de unidad</label>
+                                <input type="text" class="form-control" id="input6" name="valoruSal" placeholder="Ingresa Valor">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="mb-3">
+                <label for="input2" class="form-label">Stock</label>
+                <input type="text" class="form-control" id="stock" name="stock" placeholder="Cantidad de stock" readonly>
+            </div>
+            <div class="mb-3">
+                <label for="input2" class="form-label">Valor Inventario</label>
+                <input type="text" class="form-control" id="valorinv" name="valorinv" placeholder="Valor inventario" readonly>
+            </div>
+
+            <!-- Botón de Enviar -->
+            <div class="mt-3">
+                <button type="submit" class="btn btn-primary">Enviar</button>
+            </div>
+        </form>
+
+        <script src="{% static 'inventario/js/funciones.js' %}"></script>
+
+    </div>
+    
+      
+</div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+
+
+{% endblock %}

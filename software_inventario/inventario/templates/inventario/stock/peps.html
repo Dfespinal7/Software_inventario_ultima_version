@@ -1,0 +1,51 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% load custom_filters %}
+{% block titul %}peps{% endblock %}
+{% block container %}
+{% if request.session.logueo %}
+<div class="bg-white p-4 border rounded custom-padding m-4 rounded-lg">
+    
+    <div class="text-center">
+        <img src="{% static 'inventario/img/MetodoPeps.png' %}" alt="" style="width: 110px; height: auto; float: right; margin-left: 10px;">
+        <h1>PEPS</h1>
+        <form action="{% url 'busqueda_peps' %}" method="get">
+            <table class="table table-bordered">
+                <tr>
+                    <th class="bg-light">codigo</th>
+                    <th><select name="codigo" id="" class="form-control" onchange="this.form.submit()">
+                        <option value="">Seleccione Producto</option>
+                        {% for i in productos %}
+                        <option value="{{i.idProducto}}"{% if i.idProducto == entradas.idProducto %}selected{% endif %}>{{i.idProducto}}</option>
+                        {% endfor %}
+                    </select></th>
+                    <th class="bg-light">Producto</th>
+                    <th colspan="3" >{% if entradas %}{{ entradas.0.idProducto }}{% endif %}</th>
+                </tr>
+                <tr>
+                    <th>Fecha de entrada</th>
+                    <th>Cantidad/Entradas</th>
+                    <th>Cantidad/Salidas</th>
+                    <th>Saldo</th>
+                    <th>Costo/Unitario</th>
+                    <th>Factura</th>
+                </tr>
+                {%for i in entradas %}
+                    <tr>
+                        <td>{{i.fechaEnt}}</td>
+                        <td>{{i.cantEntInicial}}</td>
+                        <td>{{i.diferen}}</td>
+                        <td>{{i.cantidadEntrada}}</td>
+                        <td>{{i.valorUnidad|format_currency}}</td>
+                        <td>{{i.observacion}}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    
+  </div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}

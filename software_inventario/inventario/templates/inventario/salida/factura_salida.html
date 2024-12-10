@@ -1,0 +1,100 @@
+{% load static %}
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura Simulada</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .invoice-number {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+            width: 100px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            text-align: right;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <h2>INVEMPRESAS SA</h2>
+        <strong><p>NIT: 123456789</p></strong>
+    </div>
+    <div>
+        <strong> <p class="invoice-number">Factura # {{data.idSalida}}</p></strong>
+    </div>
+</div>
+
+<p>Fecha: {{data.fechaSal}}</p>
+
+<table>
+    <tr>
+        <th>Nombre del Cliente</th>
+        <th>Documento/NIT</th>
+    </tr>
+    <tr>
+        <td>{{data.idCliente.nombre}}</td>
+        <td>{{data.idCliente.documento}}</td>
+    </tr>
+</table>
+
+<table>
+    <tr>
+        <th>Código</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Cantidad</th>
+        <th>Valor Unidad</th>
+        
+    </tr>
+    <tr>
+        <td>{{data.idProducto.idProducto}}</td>
+        <td>{{data.idProducto.nombreProducto}}</td>
+        <td>{{data.idProducto.unidadMedida}}</td>
+        <td>{{data.cantidadSalida}}</td>
+        <td>${{data.valorUnidad|format_currency}}</td>
+        
+    </tr>
+</table>
+<table>
+    <tr><th>
+        Observacion
+    </th></tr>
+    <tr>
+        <td>{{data.observacion}}</td>
+    </tr>
+</table>
+
+<div class="total">
+    <p>Subtotal: ${{subtotal|format_currency}}</p>
+    <p>IVA 19%: ${{iva|format_currency}}</p>
+    <p><strong>Total: ${{total|format_currency}}

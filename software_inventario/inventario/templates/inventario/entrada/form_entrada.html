@@ -1,0 +1,76 @@
+{% extends 'inventario/base.html' %}
+{% load static %}
+{% block titul %}Formulario Entrada{% endblock %}
+{% block container %}
+{% if request.session.logueo.rol == 1 or request.session.logueo.rol == 3 %}
+<div class="bg-white p-4 m-4 border rounded">
+<div class="container mt-2">
+    <h1 class="text-center mb-4">Formulario Entrada</h1>
+    <div class="d-flex justify-content-center">
+        <div class="border p-4 rounded shadow-sm bg-light w-75">
+            <form action="{% url 'guardar_entrada' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" value="{{idEntrada}}" name="idEntrada">
+                <div class="mb-3">
+                    <label for="fechaEntrada" class="form-label">Ingrese Fecha de la Entrada</label>
+                    <input type="date" id="fechaEntrada" name="fechaEntrada" class="form-control" value="{{data.fechaEnt|date:'Y-m-d'}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="producto" class="form-label">Producto</label>
+                    <select id="producto" name="producto" class="form-select" required>
+                        <option value="" disabled selected>Seleccione Producto</option>
+                        {% for i in productos %}
+                            <option value="{{i.idProducto}}"{% if data.idProducto.idProducto == i.idProducto %}selected{% endif %}>{{i.nombreProducto}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="proveedor" class="form-label">Proveedor</label>
+                    <select id="proveedor" name="proveedor" class="form-select" required>
+                        <option value="" disabled selected>Seleccione Proveedor</option>
+                        {% for i in proveedores %}
+                            <option value="{{i.idProveedor}}"{% if data.idProveedor.idProveedor == i.idProveedor %}selected{% endif %}>{{i.nombre}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="unidadMedida" class="form-label">Unidad de Medida</label>
+                    <input type="text" id="unidadMedida" name="unidadMedida" class="form-control" placeholder="Ingrese Unidad de Medida" value="{{data.unidadMedida}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="observacion" class="form-label">N° de Factura</label>
+                    <input type="text" id="observacion" name="observacion" class="form-control" placeholder="Ingrese N° de Factura" value="{{data.observacion}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="cantidadEntrada" class="form-label">Cantidad de Entrada Inicial</label>
+                    <input type="number" id="cantidadEntrada" name="cantidadEntrada" class="form-control" placeholder="Ingrese Cantidad de Entrada" value="{{data.cantEntInicial}}" required>
+                </div>
+                {% if idEntrada %}
+                <div class="mb-3">
+                    <input type="hidden" id="" name="cantEntActual" class="form-control" placeholder="" value="{{data.cantidadEntrada}}"  required>
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    <label for="valorUnidad" class="form-label">Valor Unidad</label>
+                    <input type="number" id="valorUnidad" name="valorUnidad" class="form-control" placeholder="Ingrese Valor de la unidad" value="{{data.valorUnidad}}" required>
+                </div>
+                {% if idEntrada %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Editar</button>
+                </div>
+                {% else %}
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% else %}
+<h2 class="text-center">Inicia sesión para acceder a este apartado</h2>
+{% endif %}
+{% endblock %}
+
+
